@@ -34,6 +34,29 @@ const jobController = {
     const job = await Job.findById(id);
     response.json(job);
   },
+  updateById: async (request, response) => {
+    const { id } = request.params;
+    const {
+      title,
+      company,
+      location,
+      salary,
+      description,
+      experience,
+      skills,
+    } = request.body;
+    const update = {
+      title,
+      company,
+      location,
+      salary,
+      description,
+      experience,
+      skills,
+    };
+    await Job.findByIdAndUpdate(id, update);
+    response.json({ message: "Succefully Upadate" });
+  },
 };
 
 module.exports = jobController;
