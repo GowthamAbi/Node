@@ -1,7 +1,8 @@
 const Job = require("../module/Job");
 const jobController = {
   getJobs: async (request, response) => {
-    response.json({ message: "GETi" });
+    const Jobs = await Job.find();
+    response.json(Jobs);
   },
   createJobs: async (request, response) => {
     const {
@@ -28,8 +29,10 @@ const jobController = {
   search: (request, response) => {
     response.json({ message: "Searching" });
   },
-  getJobById: (request, response) => {
-    response.json({ message: "getJobById" });
+  getJobById: async (request, response) => {
+    const { id } = request.params;
+    const job = await Job.findById(id);
+    response.json(job);
   },
 };
 
