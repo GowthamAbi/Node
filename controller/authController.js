@@ -40,6 +40,11 @@ const authController = {
       const token = await jwt.sign({ id: User._id }, SECRET_KEY, {
         expiresIn: "1h",
       });
+      response.cookie("token", token, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
+      });
       response.json({ token, message: "Sucessfully login" });
     } catch (error) {
       response.json({ message: "Error in login", error });
@@ -47,6 +52,7 @@ const authController = {
   },
   logout: async (request, response) => {
     try {
+      response.clearCookie("token");
       response.json({ message: "Sucessfully logout" });
     } catch (err) {
       response.json({ message: "Error in logout", err });
@@ -54,9 +60,11 @@ const authController = {
   },
   my: async (request, response) => {
     try {
-      const user_id = request.user_id;
-      console.log(user_id);
-      response.json({ message: "Your in Dashboard" });
+      const userid = request.userid;
+      console.log(userid);
+
+      const login = await user.findById(userid);
+      response.json(login);
     } catch (err) {
       response.json({ message: "Error in me", err });
     }
